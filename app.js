@@ -11,33 +11,19 @@ http.createServer(app).listen(app.get('port'), function(){
 });
 
 // Middleware
-app.use(function(req, res, next) {
-  if (req.url == '/') {
-    res.end("Hello");
-  } else {
-    next();
-  }
-});
+app.set('views', __dirname + '\/templates');
+app.set('view engine', 'ejs');
 
-app.use(function(req, res, next) {
-  if (req.url == '/forbidden') {
-    next(new Error("wops, denied"));
-  } else {
-    next();
-  }
-});
+app.use(express.bodyParser());  // req.body....
+app.use(express.cookieParser()); // req.cookies
+app.use(app.router);
 
-app.use(function(req, res, next) {
-  if (req.url == '/test') {
-    res.end("Test");
-  } else {
-    next();
-  }
+app.get('/', function(req, res, next) {
+  res.render('index', {
+    body: '<b>Alex</b>'
+  });
 });
-
-app.use(function(req, res) {
-  res.send(404, "Page Not Found Sorry");
-});
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(err, req, res, next) {
   // NODE_ENV = 'production'
