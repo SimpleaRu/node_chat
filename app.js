@@ -1,12 +1,13 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-
+var config = require("./config/config")
 var app = express();
-app.set('port', 3000);
+app.set('port', config.port);
+var log = require('./libs/log')(module);
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+  log.info('Express server listening on port ' + config.port);
 });
 
 // Middleware
