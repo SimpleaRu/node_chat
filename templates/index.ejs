@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Привет, мир!</title>
-</head>
-<body>
-<section class="container">
+<% layout('./layout/page') -%>
+  <% block('title', 'Привет ≥︺‿︺≤'); -%>
 
-  <h1>Привет, мир!</h1>
-
-  <%=body%>
-  <%-body%>
-
-</section>
-</body>
-</html>
+    <p class="lead">Всем привет!</p>

@@ -19,9 +19,7 @@ app.use(express.cookieParser()); // req.cookies
 app.use(app.router);
 
 app.get("/", function(req, res, next) {
-  res.render("index", {
-    body: "<b>Alex</b>"
-  });
+  res.render("index", {});
 });
 app.use(express.static(path.join(__dirname, "public")));
 
