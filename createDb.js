@@ -1,7 +1,23 @@
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+const mongoose = require("mongoose");
 
-const Cat = mongoose.model('cat', { name: String });
+const options = {
+  useNewUrlParser: true
+};
+mongoose.connect(
+  "mongodb://localhost/cat",
+  options
+);
 
-const kitty = new Cat({ name: 'Zildjian' });
-kitty.save().then(() => console.log('meow'));
+const schema = mongoose.Schema({
+  name: String
+});
+schema.methods.meow = function() {
+  console.log(this.get("name"));
+};
+
+const Cat = mongoose.model("cat", schema);
+
+const kitty = new Cat({ name: "Zildjian" });
+kitty.save().then(() => {
+  kitty.meow();
+});
