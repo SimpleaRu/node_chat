@@ -1,23 +1,13 @@
-const mongoose = require("mongoose");
+var User = require("./models/user").User;
 
-const options = {
-  useNewUrlParser: true
-};
-mongoose.connect(
-  "mongodb://localhost/cat",
-  options
-);
-
-const schema = mongoose.Schema({
-  name: String
+var user = new User({
+  username: "Tester2",
+  password: "secret"
 });
-schema.methods.meow = function() {
-  console.log(this.get("name"));
-};
 
-const Cat = mongoose.model("cat", schema);
-
-const kitty = new Cat({ name: "Zildjian" });
-kitty.save().then(() => {
-  kitty.meow();
+user.save(function(err, user, affected) {
+  if (err) throw err;
+  User.findOne({ username: "Tester" }, function(err, tester) {
+    console.log(tester);
+  });
 });

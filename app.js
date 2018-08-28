@@ -4,7 +4,7 @@ var path = require("path");
 var config = require("./config/config");
 var app = express();
 app.set("port", config.port);
-var log = require("./libs/log")(module);
+var log = require("./lib/log")(module);
 
 http.createServer(app).listen(app.get("port"), function() {
   log.info("Express server listening on port " + config.port);
