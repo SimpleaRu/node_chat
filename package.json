@@ -6,6 +6,7 @@
     "start": "supervisor app.js"
   },
   "dependencies": {
+    "async": "^2.6.1",
     "ejs": "*",
     "ejs-locals": "^1.0.2",
     "express": "3.21.2",
