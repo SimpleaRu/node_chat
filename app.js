@@ -18,9 +18,8 @@ app.use(express.bodyParser()); // req.body....
 app.use(express.cookieParser()); // req.cookies
 app.use(app.router);
 
-app.get("/", function(req, res, next) {
-  res.render("index", {});
-});
+require("./routes")(app);
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(function(err, req, res, next) {
