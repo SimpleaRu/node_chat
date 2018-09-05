@@ -6,6 +6,7 @@ var app = express();
 app.set("port", config.port);
 var log = require("./lib/log")(module);
 var HttpError = require("http-errors").HttpError;
+var mongoose = require("./lib/mongoose");
 
 console.log(HttpError);
 
@@ -19,6 +20,23 @@ app.set("view engine", "ejs");
 
 app.use(express.bodyParser()); // req.body....
 app.use(express.cookieParser()); // req.cookies
+
+var MongoStore = require("connect-mongo")(express);
+
+app.use(
+  express.session({
+    secret: config.session.secret,
+    key: config.session.key,
+    cookie: config.session.cookie,
+    store: new MongoStore({ mongooseConnection: mongoose.connection })
+  })
+);
+
+app.use(function(req, res, next) {
+  req.session.numberOfVisits = req.session.numberOfVisits + 1 || 1;
+  res.send("Visits: " + req.session.numberOfVisits);
+});
+
 app.use(require("./middleware/sendHttpError"));
 app.use(app.router);
 
@@ -30,7 +48,7 @@ app.use(function(err, req, res, next) {
   if (typeof err == "number") {
     err = new HttpError(err);
   } else {
-  /*   if (err instanceof HttpError) {
+    /*   if (err instanceof HttpError) {
     res.sendHttpError(err);
   } */
     if (app.get("env") == "development") {

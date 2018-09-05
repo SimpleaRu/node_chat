@@ -12,5 +12,14 @@
         }
       }
     }
+  },
+  "session": {
+    "secret": "hidden",
+    "key": "sid",
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "maxAge": null
+    }
   }
 }
