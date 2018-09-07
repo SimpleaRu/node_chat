@@ -32,10 +32,10 @@ app.use(
   })
 );
 
-app.use(function(req, res, next) {
-  req.session.numberOfVisits = req.session.numberOfVisits + 1 || 1;
-  res.send("Visits: " + req.session.numberOfVisits);
-});
+// app.use(function(req, res, next) {
+//   req.session.numberOfVisits = req.session.numberOfVisits + 1 || 1;
+//   res.send("Visits: " + req.session.numberOfVisits);
+// });
 
 app.use(require("./middleware/sendHttpError"));
 app.use(app.router);
