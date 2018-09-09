@@ -6,7 +6,6 @@ async.series([
   open,
   dropDatabase,
   requireModels,
-  createUsers
 ], function(err) {
   mongoose.disconnect();
   process.exit(err ? 255 : 0)
@@ -29,14 +28,14 @@ function requireModels(callback) {
   }, callback);
 }
 
-function createUsers(callback) {
-  var users = [
-    {username: 'Vasa', password: 'supervasya'},
-    {username: 'Petya', password: '123'},
-    { username: 'admin', password:'thetruehero' }
-  ];
-  async.each(users, function(userData, callback) {
-    var user = new mongoose.models.User(userData);
-    user.save(callback);
-  }, callback);
-}
+// function createUsers(callback) {
+//   var users = [
+//     {username: 'Vasa', password: 'supervasya'},
+//     {username: 'Petya', password: '123'},
+//     { username: 'admin', password:'thetruehero' }
+//   ];
+//   async.each(users, function(userData, callback) {
+//     var user = new mongoose.models.User(userData);
+//     user.save(callback);
+//   }, callback);
+// }

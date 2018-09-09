@@ -3,7 +3,7 @@
 
 <p>Введите имя пользователя и пароль. Если такого пользователя нет - он будет создан.</p>
 
-<form class="form-horizontal login-form" action="/auth/login" method="POST" name="login-form">
+<form class="form-horizontal login-form" action="/login" method="post" name="login-form">
   <div class="form-group">
     <label for="input-username" class="col-lg-2 control-label">Имя</label>
 
@@ -28,16 +28,25 @@
 <script>
 
     const form = document.querySelector('form');
-    const formData = new FormData(form);
-    console.log( formData);
+    console.log( form);
 
-    form.addEventListener('submit', function () {
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const formData = new FormData(form);
         fetch('/login', {
             method: 'POST',
             body: formData
         }).then((response) => {
-            console.log(response)
-        })
+            console.log(response.status);
+            if (response.status == 200) {
+              console.log(response)
+              //  window.location.href = "/chat";
+            }
+            if (response.status == 403) {
+              console.log('Пароль неверен')
+            }
+
+        }).catch(err => console.log(err))
     })
 
 </script>
