@@ -21,23 +21,24 @@ app.set("view engine", "ejs");
 app.use(express.bodyParser()); // req.body....
 app.use(express.cookieParser()); // req.cookies
 
-var MongoStore = require("connect-mongo")(express);
+const session = require('express-session');
+var MongoStore = require("connect-mongo")(session);
 
 app.use(
-  express.session({
+  session({
     secret: config.session.secret,
+    resave: false,
+    saveUninitialized: false,
     key: config.session.key,
     cookie: config.session.cookie,
     store: new MongoStore({ mongooseConnection: mongoose.connection })
   })
 );
+  
+  app.use(require("./middleware/sendHttpError"));
+  app.use(require("./middleware/loadUser"));
 
-// app.use(function(req, res, next) {
-//   req.session.numberOfVisits = req.session.numberOfVisits + 1 || 1;
-//   res.send("Visits: " + req.session.numberOfVisits);
-// });
 
-app.use(require("./middleware/sendHttpError"));
 app.use(app.router);
 
 require("./routes")(app);

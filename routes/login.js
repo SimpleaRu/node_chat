@@ -34,6 +34,7 @@ exports.post = function (req, res, next) {
   ], function (err, user) {
     if (err) return next(err);
     req.session.user = user._id;
+    req.session.save()
     res.send();
   });
 }
