@@ -27,8 +27,6 @@ var MongoStore = require("connect-mongo")(session);
 app.use(
   session({
     secret: config.session.secret,
-    resave: false,
-    saveUninitialized: false,
     key: config.session.key,
     cookie: config.session.cookie,
     store: new MongoStore({ mongooseConnection: mongoose.connection })
