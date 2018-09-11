@@ -39,13 +39,6 @@ app.use(
 app.use(require("./middleware/sendHttpError"));
 app.use(require("./middleware/loadUser"));
 
-// app.use((req, res, next) => {
-//   console.log("res.sendHttpError" + " " + res.sendHttpError);
-//   next();
-// });
-
-// console.log("Now env is " + process.env.NODE_ENV);
-
 app.use(app.router);
 
 require("./routes")(app);
@@ -71,6 +64,16 @@ app.use(function(err, req, res, next) {
   }
 });
 
-http.createServer(app).listen(config.port, function() {
+var server = http.createServer(app);
+server.listen(config.port, function() {
   log.info("Express server listening on port " + config.port);
+});
+
+var io = require("socket.io").listen(server);
+
+io.on("connection", function(socket) {
+  socket.emit("news", { hello: "world" });
+  socket.on("my_event", function(data) {
+    console.log(data);
+  });
 });
