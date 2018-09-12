@@ -3,10 +3,40 @@
 
     <p class="lead">Здесь будет чат</p>
     <script src="/socket.io/socket.io.js"></script>
+
+    <div id="room" > 
+      <ul></ul>
+      <form>
+        <input class="form-control" autocomplete="off" autofocus placeholder="Cообщение..." >
+      </form>
+    </div>
+
     <script>
-      var socket = io.connect();
-      socket.on("news", function (data) {
-        console.log(data);
-        socket.emit("my_event", {my: "data"});
+      const socket = io.connect();
+      const form = document.querySelector('#room form');
+      const ul = document.querySelector('#room ul');
+      const input = document.querySelector('#room input');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var text = input.value;
+   
+        socket.emit('message', text, function(data) {
+
+          // var element = document.createElement("li");
+          // element.innerText = text
+          // ul.appendChild(element);
+        });
+        input.value = '';
+        return false;
+      })
+
+
+      socket.on("message", function (text) {
+        console.log(text)
+          var element = document.createElement("li");
+         
+          element.innerText = text
+          ul.appendChild(element);
       });
     </script>
