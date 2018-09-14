@@ -69,12 +69,4 @@ server.listen(config.port, function() {
   log.info("Express server listening on port " + config.port);
 });
 
-var io = require("socket.io").listen(server);
-
-io.on("connection", function(socket) {
-  socket.on("message", function(text, cb) {
-    console.log(text);
-    socket.broadcast.emit("message", text);
-    cb(text);
-  });
-});
+require("./socket")(server);
