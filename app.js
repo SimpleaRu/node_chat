@@ -72,8 +72,9 @@ server.listen(config.port, function() {
 var io = require("socket.io").listen(server);
 
 io.on("connection", function(socket) {
-  socket.on("message", function(text) {
+  socket.on("message", function(text, cb) {
     console.log(text);
-    socket.emit("message", text);
+    socket.broadcast.emit("message", text);
+    cb(text);
   });
 });

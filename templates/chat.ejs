@@ -23,9 +23,9 @@
    
         socket.emit('message', text, function(data) {
 
-          // var element = document.createElement("li");
-          // element.innerText = text
-          // ul.appendChild(element);
+           var element = document.createElement("li");
+          element.innerText = data
+          ul.appendChild(element);
         });
         input.value = '';
         return false;
@@ -35,7 +35,6 @@
       socket.on("message", function (text) {
         console.log(text)
           var element = document.createElement("li");
-         
           element.innerText = text
           ul.appendChild(element);
       });
