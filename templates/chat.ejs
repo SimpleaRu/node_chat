@@ -5,6 +5,7 @@
     <script src="vendor/bower_components/socket.io-client/dist/socket.io.js"></script>
 
     <div id="room" > 
+    <p id="status" ></p>
       <ul></ul>
       <form>
         <input class="form-control" autocomplete="off" autofocus placeholder="Cообщение..." >
@@ -12,30 +13,76 @@
     </div>
 
     <script>
-      const socket = io.connect();
       const form = document.querySelector('#room form');
       const ul = document.querySelector('#room ul');
+      const statusIndication = document.getElementById('status');
       const input = document.querySelector('#room input');
-
-      form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var text = input.value;
-   
-        socket.emit('message', text, function(data) {
-
-           var element = document.createElement("li");
-          element.innerText = data
-          ul.appendChild(element);
-        });
-        input.value = '';
-        return false;
-      })
-
-
-      socket.on("message", function (text) {
-        console.log(text)
-          var element = document.createElement("li");
-          element.innerText = text
-          ul.appendChild(element);
+      const socket = io.connect('', {
+        reconnect: false,
       });
+
+    socket.on('message', function(message) {
+      printMessage(message);
+    })
+    .on('connect', function() {
+      printStatus("соединение установлено");
+      form.on('submit', sendMessage); // jQuery
+      input.props('disable', false); // jQuery
+    })
+    .on('disconnect', function() {
+      printStatus("соединение потеряно");
+      form.off('submit', sendMessage); // jQuery
+      input.props('disable', true); // jQuery
+      setTimeout(reconnect, 500);
+    });
+
+    function sendMessage() {
+      let text = input.value; 
+      socket.emit('message', text, function() {
+        printMessage(text);
+      });
+      input.value = '';
+      return false;
+    }
+
+    function reconnect() {
+      socket.once('error', function() {
+        setTimeout(reconnect, 500);
+      });
+      socket.socket.connect(); 
+    }
+
+    function printStatus(status) {
+      statusIndication.innerText = status
+    }
+
+    function printMessage(text) {
+      var element = document.createElement("li");
+      element.innerText = text
+      ul.appendChild(element);
+    }
+
+
+
+      // form.addEventListener('submit', function(e) {
+      //   e.preventDefault();
+      //   var text = input.value;
+   
+      //   socket.emit('message', text, function(data) {
+
+      //      var element = document.createElement("li");
+      //     element.innerText = data
+      //     ul.appendChild(element);
+      //   });
+      //   input.value = '';
+      //   return false;
+      // })
+
+
+      // socket.on("message", function (text) {
+      //   console.log(text)
+      //     var element = document.createElement("li");
+      //     element.innerText = text
+      //     ul.appendChild(element);
+      // });
     </script>
