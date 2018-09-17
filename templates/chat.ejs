@@ -26,13 +26,19 @@
     })
     .on('connect', function() {
       printStatus("соединение установлено");
-      form.on('submit', sendMessage); // jQuery
-      input.props('disable', false); // jQuery
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        sendMessage();
+      })
+      input.disabled = false;
     })
     .on('disconnect', function() {
       printStatus("соединение потеряно");
-      form.off('submit', sendMessage); // jQuery
-      input.props('disable', true); // jQuery
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        sendMessage();
+      });
+      input.disabled = true;
       setTimeout(reconnect, 500);
     });
 
@@ -62,27 +68,4 @@
       ul.appendChild(element);
     }
 
-
-
-      // form.addEventListener('submit', function(e) {
-      //   e.preventDefault();
-      //   var text = input.value;
-   
-      //   socket.emit('message', text, function(data) {
-
-      //      var element = document.createElement("li");
-      //     element.innerText = data
-      //     ul.appendChild(element);
-      //   });
-      //   input.value = '';
-      //   return false;
-      // })
-
-
-      // socket.on("message", function (text) {
-      //   console.log(text)
-      //     var element = document.createElement("li");
-      //     element.innerText = text
-      //     ul.appendChild(element);
-      // });
     </script>
