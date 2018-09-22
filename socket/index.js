@@ -1,7 +1,11 @@
 var log = require("../lib/log")(module);
 var config = require("../config/config");
 var cookie = require('cookie');
-var cookieParser = require('cookie-parser')
+var cookieParser = require('cookie-parser');
+
+function loadSession(sid, callback) {
+
+}
 
 module.exports = function(server) {
   var io = require("socket.io").listen(server);

@@ -4,9 +4,9 @@ var path = require("path");
 var config = require("./config/config");
 var log = require("./lib/log")(module);
 var HttpError = require("./error").HttpError;
-var mongoose = require("./lib/mongoose");
-
+var sessionStore = require('./lib/sessionStore');
 var app = express();
+const session = require("express-session");
 app.set("port", config.port);
 
 app.engine("ejs", require("ejs-locals"));
@@ -24,15 +24,12 @@ if (app.get("env") == "development") {
 app.use(express.bodyParser()); // req.body....
 app.use(express.cookieParser()); // req.cookies
 
-const session = require("express-session");
-var MongoStore = require("connect-mongo")(session);
-
 app.use(
   session({
     secret: config.session.secret,
     key: config.session.key,
     cookie: config.session.cookie,
-    store: new MongoStore({ mongooseConnection: mongoose.connection })
+    store: sessionStore
   })
 );
 
