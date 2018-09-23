@@ -1,7 +1,7 @@
 <% layout('./layout/page') -%>
   <% block('title', 'Чат'); -%>
 
-    <p class="lead">Здесь будет чат</p>
+    <p class="lead"></p>
     <script src="vendor/bower_components/socket.io-client/dist/socket.io.js"></script>
 
     <div id="room" > 
@@ -14,6 +14,7 @@
 
     <script>
       const form = document.querySelector('#room form');
+      const lead = document.querySelector('.lead');
       const ul = document.querySelector('#room ul');
       const statusIndication = document.getElementById('status');
       const input = document.querySelector('#room input');
@@ -30,6 +31,9 @@
     })
     .on('leave', function(username) {
       printMessage(username + ' вышел из чата');
+    })
+    .on('enter', function(username) {
+      lead.innerText = username || 'incognito';
     })
     .on('connect', function() {
       printStatus("соединение установлено");
