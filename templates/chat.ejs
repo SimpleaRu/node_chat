@@ -21,8 +21,15 @@
         reconnect: false,
       });
 
-    socket.on('message', function(message) {
-      printMessage(message);
+    socket
+    .on("message", function(username, message) {
+      printMessage( username + ': ' + message);
+    })
+    .on('join', function(username) {
+      printMessage(username + ' вошел в чат');
+    })
+    .on('leave', function(username) {
+      printMessage(username + ' вышел из чата');
     })
     .on('connect', function() {
       printStatus("соединение установлено");
@@ -40,12 +47,21 @@
       });
       input.disabled = true;
       setTimeout(reconnect, 500);
-    });
+    })
+    // .on('error', function(reason) {
+    //     if (reason == "handshake unauthorized") {
+    //       printStatus("вы вышли из сайта");
+    //     } else {
+    //       setTimeout(function() {
+    //         socket.socket.connect();
+    //       }, 500);
+    //     }
+    //   });
 
     function sendMessage() {
       let text = input.value; 
       socket.emit('message', text, function() {
-        printMessage(text);
+        printMessage('я: ' + text);
       });
       input.value = '';
       return false;

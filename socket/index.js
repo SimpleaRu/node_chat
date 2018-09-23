@@ -59,19 +59,20 @@ module.exports = function (server) {
         socket.handshake.user = user;
         next();
       })
-    // console.log(socket.handshake);
-  })
-
-  io.use(function(socket, next) {
-    console.log(socket.handshake.user)
-    next();
-  })
-
-  io.on("connection", function (socket) {
-    socket.on("message", function (text, cb) {
-      console.log(text);
-      socket.broadcast.emit("message", text);
-      cb(text);
-    });
   });
+
+
+io.on("connection", function (socket) {
+  var username = socket.handshake.user.username;
+  socket.broadcast.emit('join', username);
+  socket.on("message", function (text, cd) {
+    socket.broadcast.emit("message", username, text);
+    cd && cd();
+  });
+  socket.on('disconnect', function () {
+    socket.broadcast.emit('leave', username);
+  })
+
+});
+return io;
 };
